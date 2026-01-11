@@ -1,6 +1,15 @@
+import { Firestore } from "@google-cloud/firestore";
 import Image from "next/image";
 
 export default async function Home() {
+  const firestore = new Firestore();
+
+  const usersSnapshot = await firestore.collection('users').get();
+
+  console.log('Users in Firestore:');
+  usersSnapshot.forEach(doc => {
+    console.log(`${doc.id} =>`, doc.data());
+  });
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">

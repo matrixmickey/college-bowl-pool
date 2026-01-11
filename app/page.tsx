@@ -8,13 +8,11 @@ export default async function Home() {
 
   const usersSnapshot = await firestore.collection('users').get();
 
-  console.log('Users in Firestore:');
-  usersSnapshot.forEach(doc => {
-    console.log(`${doc.id} =>`, doc.data());
-  });
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      {usersSnapshot.docs.map(doc => (
+        <p key={doc.id}>{doc.data().email}</p>
+      ))}
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <Image
           className="dark:invert"

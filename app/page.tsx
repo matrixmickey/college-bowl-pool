@@ -4,6 +4,13 @@ import Image from "next/image";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
+  function handleMessage(event: MessageEvent) {
+    console.log("User received from wrapper: ", event.data.payload.email);
+    window.removeEventListener("message", handleMessage);
+  }
+
+  window.addEventListener("message", handleMessage);
+
   const firestore = new Firestore();
 
   const usersSnapshot = await firestore.collection('users').get();

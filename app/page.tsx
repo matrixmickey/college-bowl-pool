@@ -6,7 +6,7 @@ import { useEffect } from "react";
 export default function Home() {
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
-      console.log("User received from wrapper: ", event.data.payload.email);
+      console.log("User received from wrapper: ", event.data.email);
       window.removeEventListener("message", handleMessage);
     }
     window.addEventListener("message", handleMessage);

@@ -1,25 +1,19 @@
-import { Firestore } from "@google-cloud/firestore";
+"use client";
+
 import Image from "next/image";
+import { useEffect } from "react";
 
-export const dynamic = "force-dynamic";
-
-export default async function Home() {
-  function handleMessage(event: MessageEvent) {
-    console.log("User received from wrapper: ", event.data.payload.email);
-    window.removeEventListener("message", handleMessage);
-  }
-
-  window.addEventListener("message", handleMessage);
-
-  const firestore = new Firestore();
-
-  const usersSnapshot = await firestore.collection('users').get();
+export default function Home() {
+  useEffect(() => {
+    function handleMessage(event: MessageEvent) {
+      console.log("User received from wrapper: ", event.data.payload.email);
+      window.removeEventListener("message", handleMessage);
+    }
+    window.addEventListener("message", handleMessage);
+  }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      {usersSnapshot.docs.map(doc => (
-        <p key={doc.id}>{doc.data().email}</p>
-      ))}
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <Image
           className="dark:invert"

@@ -1,19 +1,23 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { User } from "@auth0/nextjs-auth0/types";
 
 export default function Home() {
+  const [user, setUser] = useState<User | null>(null);
+
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
-      console.log("User received from wrapper: ", event.data.email);
       window.removeEventListener("message", handleMessage);
+      setUser(event.data);
     }
     window.addEventListener("message", handleMessage);
-  }, []);
+  }, [setUser]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      <p>{user ? `User: ${user.email}` : "No user data received."}</p>
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <Image
           className="dark:invert"

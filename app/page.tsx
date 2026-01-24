@@ -1,20 +1,10 @@
-"use client";
-
+import { auth0 } from "@/lib/auth0";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { User } from "@auth0/nextjs-auth0/types";
 
-export default function Home() {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    function handleMessage(event: MessageEvent) {
-      window.removeEventListener("message", handleMessage);
-      setUser(event.data);
-    }
-    window.addEventListener("message", handleMessage);
-  }, [setUser]);
-
+export default async function Home() {
+  const session = await auth0.getSession();
+  const user = session?.user;
+  
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <p>{user ? `User: ${user.email}` : "No user data received."}</p>

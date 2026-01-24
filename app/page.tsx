@@ -1,8 +1,12 @@
 import { auth0 } from "@/lib/auth0";
+import { headers } from "next/headers";
 import Image from "next/image";
 
 export default async function Home() {
-  await fetch(`${process.env.APP_BASE_URL}/auth/login`);
+  const headersList = await headers();
+  const protocol = headersList.get('x-forwarded-proto');
+  const domain = headersList.get('host');
+  await fetch(`${protocol}://${domain}/auth/login`);
   const session = await auth0.getSession();
   const user = session?.user;
   

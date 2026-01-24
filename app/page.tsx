@@ -2,6 +2,7 @@ import { auth0 } from "@/lib/auth0";
 import Image from "next/image";
 
 export default async function Home() {
+  await fetch(`${process.env.APP_BASE_URL}/auth/login`);
   const session = await auth0.getSession();
   const user = session?.user;
   

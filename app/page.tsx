@@ -1,18 +1,28 @@
-import { auth0 } from "@/lib/auth0";
-import { headers } from "next/headers";
-import Image from "next/image";
+"use client";
 
-export default async function Home() {
-  const headersList = await headers();
-  const protocol = headersList.get('x-forwarded-proto');
-  const domain = headersList.get('host');
-  await fetch(`${protocol}://${domain}/auth/login`);
-  const session = await auth0.getSession();
-  const user = session?.user;
+import User from "@/lib/User";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+export default function Home() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    function handleUserReceived(event: MessageEvent) {
+      if (event.origin !== process.env.NEXT_PUBLIC_PARENT_URL) {
+        return;
+      }
+      window.removeEventListener('message', handleUserReceived);
+      setUser(event.data as User);
+    }
+
+    window.addEventListener('message', handleUserReceived);
+    window.parent.postMessage('requestUser', process.env.NEXT_PUBLIC_PARENT_URL as string);
+  }, []);
   
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <p>{user ? `User: ${user.email}` : "No user data received."}</p>
+      <p>{user ? user.email : "No user found"}</p>
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <Image
           className="dark:invert"

@@ -1,28 +1,13 @@
-"use client";
-
-import User from "@/lib/User";
+import { auth0 } from "@/lib/auth0";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
-export default function Home() {
-  const [user, setUser] = useState<User | null>(null);
+export default async function Home() {
+  const session = await auth0.getSession();
+  const user = session?.user;
 
-  useEffect(() => {
-    function handleUserReceived(event: MessageEvent) {
-      if (event.origin !== process.env.NEXT_PUBLIC_PARENT_URL) {
-        return;
-      }
-      window.removeEventListener('message', handleUserReceived);
-      setUser(event.data as User);
-    }
-
-    window.addEventListener('message', handleUserReceived);
-    window.parent.postMessage('requestUser', process.env.NEXT_PUBLIC_PARENT_URL as string);
-  }, []);
-  
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <p>{user ? user.email : "No user found"}</p>
+      <p>user: {user?.email}</p>
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <Image
           className="dark:invert"

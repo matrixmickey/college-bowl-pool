@@ -1,0 +1,22 @@
+[
+    {
+        "name": "2026-2027",
+        "submissionDeadline": 1797916800000,
+        "games": [
+            {
+                "name": "Championship Game",
+                "time": 1798401600000,
+                "location": "Stadium X",
+                "points": 4,
+                "teams": ["Miami", "Indiana"]
+            },
+            {
+                "name": "Pop tarts Game",
+                "time": 1798301600000,
+                "location": "Stadium X",
+                "points": 1,
+                "teams": ["Georgia Tech", "BYU"]
+            }
+        ]
+    }
+]
